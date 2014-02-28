@@ -5,14 +5,9 @@ class Parser
       next if index == 0
       purchaser_name, item_description, item_price, purchase_count, merchant_address, merchant_name = line.split("\t")
 
-      purchaser = Purchaser.find_or_create_by_name(purchaser_name)
-      purchaser.save!
-
-      merchant = Merchant.find_or_create_by_name_and_address(merchant_name, merchant_address)
-      merchant.save!
-
-      item = Item.find_or_create_by_description_and_price(item_description, item_price)
-      item.save!
+      purchaser = Purchaser.find_or_create_by(name: purchaser_name)
+      merchant = Merchant.find_or_create_by(name: merchant_name, address: merchant_address)
+      item = Item.find_or_create_by(description: item_description, price: item_price)
 
       merchant.items << item
       merchant.save!
@@ -26,6 +21,8 @@ class Parser
       purchases << purchase
     end
 
+    # this math is done here, because the gross revenues are per upload, not for the current
+    # state of the database.
     gross_revenue = purchases.inject(0) { |acc, purchase| acc += (purchase.item.price * purchase.count) }
     gross_revenue
 

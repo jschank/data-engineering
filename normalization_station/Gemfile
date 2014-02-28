@@ -43,3 +43,13 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+group :development do
+  gem 'hirb'
+  gem 'wirble'
+  gem 'term-ansicolor'
+end
+group :test do
+  gem 'minitest-spec-rails'
+  gem 'minitest-wscolor'
+end
